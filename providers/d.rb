@@ -33,6 +33,7 @@ action :create do
   if node['platform_family'] == 'solaris2'
     fail 'Solaris does not support cron jobs in /etc/cron.d'
   end
+
   t = template "/etc/cron.d/#{new_resource.name}" do
     cookbook new_resource.cookbook
     source 'cron.d.erb'
@@ -47,7 +48,7 @@ action :create do
                 :weekday => new_resource.weekday,
                 :command => new_resource.command,
                 :user => new_resource.user,
-                :mailto => new_resource.mailto,
+                :mailto => new_resource.mailto || node[:cron_default_mailto],
                 :path => new_resource.path,
                 :home => new_resource.home,
                 :shell => new_resource.shell,
